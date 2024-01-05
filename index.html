@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 
-<head lang="en">
+<head lang="zh-tw">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <style>
         @import url('https://fonts.googleapis.com/css?family=Roboto+Mono');
@@ -113,39 +113,39 @@
 
 <body>
     <h1 id="how-to-get-your-minecraft-bearer-token">
-        How to get your Minecraft bearer token
+        如何獲得您的 Minecraft bearer token
     </h1>
     <h2 id="what-is-a-minecraft-bearer-token-">
-        What is a Minecraft bearer token?
+        什麼是Minecraft bearer token?
     </h2>
     <p>
-        A Minecraft bearer token is a <a href="https://jwt.io">JWT token</a> used to authenticate with <a href="https://mojang-api-docs.gapple.pw/">Minecraft's private APIs</a>.
+        A Minecraft bearer token 是個<a href="https://jwt.io">JWT token</a> 用於驗證 <a href="https://mojang-api-docs.gapple.pw/">Minecraft's private APIs</a>.
     </p>
     <p>
-        NOTE: Bearer tokens only last <b>24 hours</b>.
+        注意⚠️: Bearer tokens 只能使用 <b>24 小時</b>.
     </p>
     <h2 id="get-your-bearer-token">
-        Get your bearer token
+        獲得您的bearer token
 
     </h2>
     <ul>
         <li>
-            Sign in to your Minecraft account at
+            登入您的 Minecraft account 在
             <a href="https://minecraft.net">minecraft.net</a>
         </li>
         <li>
-            Open the Chrome / Firefox developer tools (<b>ctrl + shift + i</b> or <b>f12</b>) <em>or</em> right click
-            and click <b>inspect element</b>
+            打開Chrome / Firefox 開發者 (<b>ctrl + shift + i</b> 或 <b>f12</b>) <em>或</em> 右鍵
+            然後點 <b>檢查</b>
         </li>
         <li>
-            Go to the &quot;console&quot; tab
+            點擊&quot;控制台&quot;
 
         </li>
-        <li>Paste this code into the console:
+        <li>將此程式碼貼到控制台中：
             <div id="codeWrapper">
                 <div id="code">console.log(`; ${document.cookie}`.split('; bearer_token=').pop().split(';').shift())
                 </div>
-                <i class="material-icons">content_copy</i>
+                <i class="material-icons">複製內容</i>
             </div>
             <!-- <pre><code class="lang-js"><span class="hljs-built_in">console</span>.log(<span class="hljs-string">`; <span class="hljs-subst">${<span class="hljs-built_in">document</span>.cookie}</span>`</span>.split(<span class="hljs-string">`; bearer_token=`</span>).pop().split(<span class="hljs-string">';'</span>).shift())
 </code></pre> -->
@@ -155,8 +155,8 @@
         </li>
         <li>Copy the bearer token that it shows in the console</li>
     </ul>
-    <p>You now have your minecraft account&#39;s bearer token.</p>
-    <p><b>IMPORTANT: if you give someone this token they essentially have full control of your Minecraft account.</b></p>
+    <p>您現在擁有了Minecraft帳戶&#39;的bearer token.</p>
+    <p><b>重要：如果您向某人提供此token，他們可以完全控制您的 Minecraft 帳戶。</b></p>
     <footer>This page is made by <a href="https://kqzz.me">Kqzz</a> with source code available <a
             href="https://github.com/Kqzz/mc-bearer-token">here</a></footer>
     <script>
