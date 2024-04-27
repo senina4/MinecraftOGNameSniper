@@ -1,35 +1,55 @@
-try:
-    from mojang import API as mcapi
-    from mojang import Client as cl
-    import mojang
-    import requests
-    import sys
-    import time
-    from colorama import Fore, Back, just_fix_windows_console
-    just_fix_windows_console()
-    from datetime import datetime
+import requests
+import json
+import time
+import sys
+from colorama import just_fix_windows_console, Fore, Back, Style
 
-    
-    
-    def msg(tittle, submsg):
-        return f"{Fore.CYAN}{Back.RESET}{datetime.now().hour}-{datetime.now().minute}-{datetime.now().second} {Fore.BLUE}{tittle}{Fore.RESET}: {Fore.GREEN}{submsg}{Fore.RESET}"
-    bearer_token = input(msg("登入", "請輸入 bearer token(你可以在'https://senina4.github.io/OGName/'找到如何獲取bearer token): "))
-    client = cl(bearer_token=bearer_token)
-    newname = input(msg("系統", "輸入你想要的新名稱: "))
-    api = mcapi()
-    uuid = api.get_uuid(client.get_profile().name)
-    times = 0
+class API():
+    def get_profile_information(self, bearer_token):
+        response = requests.get(url="https://api.minecraftservices.com/minecraft/profile", headers={
+            "Authorization": "Bearer %s" %bearer_token
+        })
+        if response.status_code == 200:
+            return json.loads(response.text)
+        elif response.status_code== 401:
+            raise Exception("Unauthorized (Bearer token expired or is not correct).")
+        elif response.status_code == 500:
+            print("Timed out (API lagged out and could not respond).")
+        else:
+            raise Exception("something went wrong: %s" % response.status_code)
+    def change_username(self, bearer_token, new_username):
+        headers = {
+            "Authorization": "Bearer %s" %bearer_token,
+            "Content-Type": "application/json"
+        }
+
+        response = requests.put("https://api.minecraftservices.com/minecraft/profile/name/%s" %new_username, headers=headers)
+            
+        if response.status_code == 200:
+            print("Username changed successfully!")
+            time.sleep(1)
+            if API().get_profile_information(bearer_token=bearer_token)["name"] == new_username:
+                sys.exit("Username changed successfully!")
+        elif response.status_code == 400:
+            raise Exception("Name is invalid, longer than 16 characters or contains characters other than (a-zA-Z0-9_).")
+        elif response.status_code == 403:
+            print("Name is unavailable (Either taken or has not become available).")
+        elif response.status_code == 401:
+            raise Exception("Unauthorized (Bearer token expired or is not correct).")
+        elif response.status_code == 429:
+            print("Too many requests.")
+        elif response.status_code == 500:
+            print("Timed out (API lagged out and could not respond).")
+
+def main():
+    just_fix_windows_console()
+    bearer_token = input("Please enter your bearer token: ")
+    profile = API().get_profile_information(bearer_token=bearer_token)
+    print("Username: %s" % profile["name"])
+    print("UUID: %s" % profile["id"])
+    new_username = input(Fore.RED + "Warning: Limitations You can only change your username once every 30 days. A username must be between 3 and 16 characters and cannot contain invalid characters.\n" + Fore.RESET + "Enter the new name you want: ")
     while True:
-        if api.get_uuid(uuid) == newname:
-            print(msg("系統", "成功"))
-            time.sleep(5)
-            exit()
-        time.sleep(5)
-        times += 1
-        print(msg("系統", times))
-        client.change_username(newname)
-     
-except KeyboardInterrupt:
-    print(msg("\n系統", "已結束程式"))
-except Exception as ex:
-    print(msg("系統", f"發生錯誤, 錯誤代碼: {ex}"))
+        API().change_username(bearer_token=bearer_token, new_username=new_username)
+
+if __name__ == "__main__":
+    main()
